@@ -12,15 +12,22 @@ namespace RegisterUserLab.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        [BindProperty]
+        private User? UserRegister { get; set; } 
 
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
+           
         }
-
+       
         public IActionResult Index()
         {
-            return View();
+            if (UserRegister == null)
+            {
+               UserRegister = new User() { Name = "", confPassword = "", Email = "", Login = "", Password = "", Surname = "" };
+            }
+            return View(UserRegister);
         }
 
         public IActionResult Privacy()
@@ -32,6 +39,17 @@ namespace RegisterUserLab.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Register(User user)
+        {
+            if (ModelState.IsValid)
+            {
+                Debug.WriteLine("Jest ok");
+                return View();
+            }
+            return RedirectToAction(nameof(Index));
         }
     }
 }
