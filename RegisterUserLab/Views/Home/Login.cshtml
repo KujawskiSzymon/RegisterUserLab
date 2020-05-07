@@ -1,0 +1,64 @@
+﻿@model RegisterUserLab.Models.User
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h1>Login</h1>
+
+<form action="LoginDo">
+    <div class="form-group">
+        <div class="form-group">
+
+            <div class="col-4">
+                Login
+            </div>
+            <div class="col-6">
+                <input class="form-control" asp-for="Login" type="text" placeholder="Login" />
+
+            </div>
+            <span class="text-danger" asp-validation-for="Password" />
+        </div>
+        <div class="col-4">
+            Hasło
+        </div>
+        <div class="col-6">
+            <input class="form-control" asp-for="Password" type="password" placeholder="Hasło" />
+            Odsłoń hasło
+            <input type="checkbox" id="showPass" />
+        </div>
+           
+
+              
+
+            
+            <span class="text-danger" asp-validation-for="Password" />
+        </div>
+
+    <input type="submit" value="Zaloguj" class="btn btn-primary form-control" />
+    <div class="form-group">
+
+      
+
+        </div>
+
+    </div>
+
+</form>
+@section scripts{ 
+
+    <script>
+        $(function() {
+
+    $("#showPass").change(function() {
+        var checked = $(this).is(":checked");
+        if (checked) {
+            $("#Password").attr("type", "text");
+        } else {
+            $("#Password").attr("type", "password");
+        }
+    });
+
+});
+    </script>
+
+}

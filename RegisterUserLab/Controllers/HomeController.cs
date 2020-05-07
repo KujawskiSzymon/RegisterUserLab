@@ -30,7 +30,12 @@ namespace RegisterUserLab.Controllers
             return View(UserRegister);
         }
 
-        public IActionResult Privacy()
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        public IActionResult LoginDo(User user)
         {
             return View();
         }
