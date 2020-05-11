@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+
 using Microsoft.Extensions.Logging;
 using RegisterUserLab.Models;
 
@@ -25,7 +27,7 @@ namespace RegisterUserLab.Controllers
         {
             if (UserRegister == null)
             {
-               UserRegister = new User() { Name = "", confPassword = "", Email = "", Login = "", Password = "", Surname = "" };
+               UserRegister = new User() { Name = "", confPassword = "",Position="", Email = "", Login = "", Password = "", Surname = "" };
             }
             return View(UserRegister);
         }
@@ -35,9 +37,18 @@ namespace RegisterUserLab.Controllers
             return View();
         }
 
+        public IActionResult Admin()
+        {
+            return View("Admin");
+        }
+        public IActionResult UserHome()
+        {
+            return View("UserView");
+        }
+
         public IActionResult LoginDo(User user)
         {
-            return View();
+            return View("UserView");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -49,12 +60,19 @@ namespace RegisterUserLab.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Register(User user)
         {
-            if (ModelState.IsValid)
-            {
-                Debug.WriteLine("Jest ok");
-                return View();
-            }
-            return RedirectToAction(nameof(Index));
+            Database database = new Database();
+            string query = "INSERT INTO User ('Login','Password') VALUES (@Login, @Password)" ;
+            SQLiteCommand command = new SQLiteCommand(query, database.Connection);
+            database.OpenConnection();
+            command.Parameters.AddWithValue("@Login", user.Login);
+            command.Parameters.AddWithValue("@Password", user.Password);
+            var result = command.ExecuteNonQuery();
+            database.CloseConnection();
+            
+               
+                return View("UserView");
+            
+            
         }
     }
 }

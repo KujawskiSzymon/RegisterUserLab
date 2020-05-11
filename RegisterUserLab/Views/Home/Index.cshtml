@@ -5,7 +5,7 @@
 </div>
 <div class="border container" style="padding:30px;">
 
-    <form method="post">
+    <form  method="post">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
             <div class="col-4">
@@ -81,7 +81,7 @@
             </div>
         </div>
 
-        <input type="submit" value="Zarejestruj" class="btn btn-primary form-control" />
+        <input type="submit" asp-action="Register"   value="Zarejestruj" class="btn btn-primary form-control" />
 
 
     </form>
