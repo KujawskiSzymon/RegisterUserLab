@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
@@ -68,9 +70,34 @@ namespace RegisterUserLab.Controllers
             command.Parameters.AddWithValue("@Password", user.Password);
             var result = command.ExecuteNonQuery();
             database.CloseConnection();
-            
-               
-                return View("UserView");
+
+            var fromAddress = new MailAddress("kujawskiszymon0@gmail.com", "Rejestracja");
+            var toAddress = new MailAddress(@user.Email, @user.Name);
+            const string fromPassword = "W momencie pisania sprawozdania tu bylo haslo do mojego maila. Teraz już nie i wyrzuci wyjątek";
+            const string subject = "Gratulacje w rejestracji";
+            const string body = "Udało się wysłać emaila";
+
+            var smtp = new SmtpClient
+            {
+               Host = "smtp.gmail.com",
+            Port = 587,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+                
+            };
+            using (var message = new MailMessage(fromAddress, toAddress)
+            {
+                Subject = subject,
+                Body = body
+            })
+            {
+                smtp.Send(message);
+            }
+
+
+            return View("UserView");
             
             
         }
